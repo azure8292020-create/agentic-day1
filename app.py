@@ -16,7 +16,17 @@ llm = ChatGoogleGenerativeAI(
 # This demonstrates how independent calls lose context because the model doesn't "remember" previous interactions.
 print("Running Part 1: Naïve Invocation...")
 resp1 = llm.invoke("We are building an AI system for processing medical insurance claims.")
-print(f"Response 1: {resp1.content}")
+def print_content(content):
+    if isinstance(content, list):
+        for item in content:
+            if isinstance(item, dict) and 'text' in item:
+                print(item['text'])
+            else:
+                print(item)
+    else:
+        print(content)
+
+print_content(resp1.content)
 
 resp2 = llm.invoke("What are the main risks in this system?")
 # Note: This second call might give a generic answer or ask for clarification 
@@ -36,7 +46,7 @@ messages = [
 print("Connecting to Gemini and processing your request...")
 response = llm.invoke(messages)
 print("\n--- ARCHITECT REVIEW ---")
-print(response.content, flush=True)
+print_content(response.content)
 
 
 """
