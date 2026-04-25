@@ -1,16 +1,15 @@
-from langchain_nvidia_ai_endpoints import ChatNVIDIA
-from langchain_core.messages import SystemMessage,HumanMessage
+from langchain_google_genai import ChatGoogleGenerativeAI
+from langchain_core.messages import SystemMessage, HumanMessage
 from dotenv import load_dotenv
 import os
 
 # Load environment variables from .env
 load_dotenv()
 
-# Initialize the NVIDIA model
-# You can change the model to any supported NVIDIA NIM model
-llm = ChatNVIDIA(
-    model="meta/llama-3.1-70b-instruct",
-    nvidia_api_key=os.getenv("NVIDIA_API_KEY")
+# Initialize the Gemini model
+llm = ChatGoogleGenerativeAI(
+    model="gemini-flash-latest",
+    google_api_key=os.getenv("GEMINI_API_KEY")
 )
 
 # --- PART 1: Naïve Invocation (Context Break) ---
@@ -34,7 +33,7 @@ messages = [
     HumanMessage(content="What are the main risks in this system?")
 ]
 
-print("Connecting to NVIDIA Inference Service and processing your request... (this may take a minute)")
+print("Connecting to Gemini and processing your request...")
 response = llm.invoke(messages)
 print("\n--- ARCHITECT REVIEW ---")
 print(response.content, flush=True)
